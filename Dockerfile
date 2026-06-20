@@ -32,7 +32,9 @@ RUN cmake -S . -B build \
         -DLLAMA_BUILD_TOOLS=ON \
         -DLLAMA_TOOLS_INSTALL=ON \
     && cmake --build build --config Release --target rpc-server --parallel 2 \
-    && cmake --install build
+    && mkdir -p /opt/llama.cpp/bin /opt/llama.cpp/lib \
+    && cp build/bin/rpc-server /opt/llama.cpp/bin/ \
+    && cp -P build/bin/*.so* /opt/llama.cpp/lib/
 
 FROM nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}
 
