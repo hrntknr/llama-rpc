@@ -22,6 +22,7 @@ RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CUDA_ARCHITECTURES="${CMAKE_CUDA_ARCHITECTURES}" \
         -DCMAKE_CUDA_FLAGS="-Wno-deprecated-gpu-targets" \
+        -DCMAKE_EXE_LINKER_FLAGS="-Wl,--allow-shlib-undefined" \
         -DCMAKE_INSTALL_PREFIX=/opt/llama.cpp \
         -DGGML_CUDA=ON \
         -DGGML_RPC=ON \
