@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "dependencyDashboard": true,
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackageNames": ["ggml-org/llama.cpp"],
+      "groupName": "llama.cpp",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["nvidia/cuda"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^Dockerfile$/"],
+      "matchStrings": ["ARG LLAMA_CPP_VERSION=(?<currentValue>[^\\s]+)"],
+      "depNameTemplate": "ggml-org/llama.cpp",
+      "datasourceTemplate": "github-releases"
+    }
+  ]
+}
