@@ -4,7 +4,7 @@ ARG UBUNTU_VERSION=24.04
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION} AS build
 
 ARG LLAMA_CPP_VERSION=b9738
-ARG CMAKE_CUDA_ARCHITECTURES="75-virtual;80-virtual;86-real;89-real;90-virtual;120a-real"
+ARG CMAKE_CUDA_ARCHITECTURES="86-real;89-real"
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
