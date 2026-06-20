@@ -12,6 +12,7 @@ RUN apt-get update \
         ca-certificates \
         cmake \
         git \
+        libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
@@ -26,14 +27,10 @@ RUN cmake -S . -B build \
         -DCMAKE_INSTALL_PREFIX=/opt/llama.cpp \
         -DGGML_CUDA=ON \
         -DGGML_RPC=ON \
-        -DLLAMA_BUILD_EXAMPLES=OFF \
-        -DLLAMA_BUILD_SERVER=OFF \
         -DLLAMA_BUILD_TESTS=OFF \
-        -DLLAMA_BUILD_TOOLS=ON \
-        -DLLAMA_TOOLS_INSTALL=ON \
-    && cmake --build build --config Release --target rpc-server --parallel 2 \
+    && cmake --build build --config Release --parallel 2 \
     && mkdir -p /opt/llama.cpp/bin /opt/llama.cpp/lib \
-    && cp build/bin/rpc-server /opt/llama.cpp/bin/ \
+    && find build/bin -maxdepth 1 -type f -executable ! -name "*.so*" -exec cp {} /opt/llama.cpp/bin/ \; \
     && cp -P build/bin/*.so* /opt/llama.cpp/lib/
 
 FROM nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}
@@ -41,6 +38,8 @@ FROM nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
+        curl \
+        ffmpeg \
         libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
