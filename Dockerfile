@@ -21,6 +21,7 @@ WORKDIR /src/llama.cpp
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CUDA_ARCHITECTURES="${CMAKE_CUDA_ARCHITECTURES}" \
+        -DCMAKE_CUDA_FLAGS="-Wno-deprecated-gpu-targets" \
         -DCMAKE_INSTALL_PREFIX=/opt/llama.cpp \
         -DGGML_CUDA=ON \
         -DGGML_RPC=ON \
@@ -29,7 +30,7 @@ RUN cmake -S . -B build \
         -DLLAMA_BUILD_TESTS=OFF \
         -DLLAMA_BUILD_TOOLS=ON \
         -DLLAMA_TOOLS_INSTALL=ON \
-    && cmake --build build --config Release --target rpc-server --parallel \
+    && cmake --build build --config Release --target rpc-server --parallel 2 \
     && cmake --install build
 
 FROM nvidia/cuda:${CUDA_VERSION}-runtime-ubuntu${UBUNTU_VERSION}
