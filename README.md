@@ -24,4 +24,4 @@ Do not expose this port to an untrusted network; upstream marks the RPC server a
 
 Renovate tracks `ARG LLAMA_CPP_VERSION` in `Dockerfile` against `ggml-org/llama.cpp` GitHub releases. When upstream publishes a new release, Renovate opens and automerges the update after CI passes. Merging to `main` builds and pushes the updated image to GHCR.
 
-The default CUDA targets are `86-real;89-real` to keep CI build time practical. Override `CMAKE_CUDA_ARCHITECTURES` at build time if you need a wider GPU matrix.
+The default CUDA target is `70-real` for NVIDIA V100. Override `CMAKE_CUDA_ARCHITECTURES` at build time if you need a different GPU target.
