@@ -5,7 +5,6 @@ FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu${UBUNTU_VERSION} AS build
 
 ARG LLAMA_CPP_VERSION=b9738
 ARG CMAKE_CUDA_ARCHITECTURES="70-real"
-ARG LLAMA_MAX_DEVICES=32
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -20,8 +19,6 @@ WORKDIR /src
 RUN git clone --depth 1 --branch "${LLAMA_CPP_VERSION}" https://github.com/ggml-org/llama.cpp.git
 
 WORKDIR /src/llama.cpp
-RUN sed -i "s/#define GGML_SCHED_MAX_BACKENDS 16/#define GGML_SCHED_MAX_BACKENDS ${LLAMA_MAX_DEVICES}/" ggml/src/ggml-backend.cpp \
-    && sed -i "s/return 16;/return ${LLAMA_MAX_DEVICES};/" src/llama.cpp
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CUDA_ARCHITECTURES="${CMAKE_CUDA_ARCHITECTURES}" \
