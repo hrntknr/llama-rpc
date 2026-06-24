@@ -40,6 +40,7 @@ RUN apt-get update \
         ca-certificates \
         curl \
         ffmpeg \
+        ibverbs-providers \
         libgomp1 \
         libibverbs1 \
     && rm -rf /var/lib/apt/lists/*
