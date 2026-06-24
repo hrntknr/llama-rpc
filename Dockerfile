@@ -41,6 +41,7 @@ RUN apt-get update \
         curl \
         ffmpeg \
         libgomp1 \
+        libibverbs1 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /opt/llama.cpp /opt/llama.cpp
