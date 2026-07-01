@@ -19,6 +19,8 @@ WORKDIR /src
 RUN git clone --depth 1 --branch "${LLAMA_CPP_VERSION}" https://github.com/ggml-org/llama.cpp.git
 
 WORKDIR /src/llama.cpp
+COPY patches/max-devices-32.patch /tmp/max-devices-32.patch
+RUN git apply /tmp/max-devices-32.patch
 RUN cmake -S . -B build \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CUDA_ARCHITECTURES="${CMAKE_CUDA_ARCHITECTURES}" \
@@ -51,5 +53,3 @@ ENV PATH="/opt/llama.cpp/bin:${PATH}" \
     LD_LIBRARY_PATH="/opt/llama.cpp/lib:${LD_LIBRARY_PATH}"
 
 EXPOSE 50052
-ENTRYPOINT ["rpc-server"]
-CMD ["--host", "0.0.0.0", "--port", "50052"]

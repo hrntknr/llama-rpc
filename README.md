@@ -13,14 +13,21 @@ ghcr.io/hrntknr/llama-rpc:<llama.cpp-release>
 
 ## Run
 
+The image sets no `ENTRYPOINT` or `CMD`; specify the binary explicitly.
+
 ```bash
-docker run --rm --gpus all -p 50052:50052 ghcr.io/hrntknr/llama-rpc:latest
+# rpc-server (GPU node)
+docker run --rm --gpus all -p 50052:50052 ghcr.io/hrntknr/llama-rpc:latest \
+  rpc-server --host 0.0.0.0 --port 50052
+
+# llama-server (client, aggregating multiple rpc-servers)
+docker run --rm ghcr.io/hrntknr/llama-rpc:latest \
+  llama-server -m model.gguf --rpc host1:50052,host2:50052 -ngl 999
 ```
 
-The container starts `rpc-server --host 0.0.0.0 --port 50052` by default.
-Do not expose this port to an untrusted network; upstream marks the RPC server as experimental and insecure.
+The RPC server is upstream-marked experimental and insecure; do not expose its port to an untrusted network.
 
-The image includes the standard `llama.cpp` binaries produced under `build/bin`, with CUDA and RPC enabled. Override the entrypoint to run another binary such as `llama-cli` or `llama-server`.
+The image includes the standard `llama.cpp` binaries produced under `build/bin`, with CUDA and RPC enabled. Run `rpc-server`, `llama-cli`, or `llama-server` by passing the binary name as the command.
 
 ## Updates
 
